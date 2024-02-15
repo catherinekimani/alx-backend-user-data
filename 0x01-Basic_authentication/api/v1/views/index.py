@@ -30,3 +30,9 @@ def stats() -> str:
 def unauthorized():
     """ test 401 unauthorized error handler """
     abort(401)
+
+
+@app_views.route("/forbidden", methods=["GET"], strict_slashes=False)
+def forbidden():
+    """ test 403 unauthorized error handler """
+    abort(403)

@@ -22,7 +22,7 @@ class SessionDBAuth(SessionExpAuth):
 
     def user_id_for_session_id(self, session_id=None):
         """ return user_id by querying UserSession in the db """
-        user_id = UserSession.search({"session_id": session_id})
+        user_id = UserSession.get({"session_id": session_id})
 
         if user_id:
             return user_id
@@ -37,7 +37,7 @@ class SessionDBAuth(SessionExpAuth):
         if not session_id:
             return False
 
-        user_session = UserSession.search({"session_id": session_id})
+        user_session = UserSession.get({"session_id": session_id})
 
         if user_session:
             user_session[0].remove()

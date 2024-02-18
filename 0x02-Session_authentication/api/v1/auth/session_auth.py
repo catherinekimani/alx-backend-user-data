@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Empty session """
+""" Session auth class """
 from api.v1.auth.auth import Auth
 from models.user import User
 import uuid

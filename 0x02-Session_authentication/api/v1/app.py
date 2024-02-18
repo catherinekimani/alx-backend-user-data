@@ -37,7 +37,8 @@ def before_request_func():
                                             '/api/v1/auth_session/login/']):
         return
     auth_user = auth.current_user(request)
-    if auth.authorization_header(request) is None and auth.session_cookie(request) is None:
+    if (auth.authorization_header(request) is None
+            and auth.session_cookie(request) is None):
         abort(401)
     if auth.current_user(request) is None:
         abort(403)

@@ -16,7 +16,7 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///a.db", echo=True)
+        self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -33,13 +33,8 @@ class DB:
     def add_user(self, email: str, hashed_password: str) -> User:
         """ Add new user to the db """
         new_user = User(email=email, hashed_password=hashed_password)
-        try:
-            self._session.add(new_user)
-            self._session.commit()
-        except Exception as e:
-            print(f"Error adding user to the database: {e}")
-            self._session.rollback()
-            raise
+        self._session.add(new_user)
+        self._session.commit()
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
@@ -50,4 +45,17 @@ class DB:
                 raise NoResultFound("No user found")
             return user
         except InvalidRequestError as e:
+            raise e
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """ update user """
+        try:
+            user = self.find_user_by(id=user_id)
+            for key, value in kwargs.items():
+                if hasattr(user, key):
+                    setattr(user, key, value)
+                else:
+                    raise ValueError(f"Invalid arguement: {key}")
+            self._session.commit()
+        except NoResultFound as e:
             raise e
